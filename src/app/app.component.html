@@ -1,0 +1,144 @@
+<mat-toolbar color="primary">
+    <mat-toolbar-row>
+      <span>Online CV Generator</span>
+      <span class="example-spacer"></span>
+
+      <button mat-button [matMenuTriggerFor]="menu">PDF</button>
+      <mat-menu #menu="matMenu">
+        <button mat-menu-item (click)="resumeForm.valid ? generatePdf('open') : ''">Open PDF</button>
+        <button mat-menu-item (click)="resumeForm.valid ? generatePdf('download') : ''">Download PDF</button>
+        <button mat-menu-item (click)="resumeForm.valid ? generatePdf('print') : ''">Print PDF</button>
+      </mat-menu>
+      <button mat-button (click)="resumeForm.valid ? generatePdf('open') : ''">Open</button>
+      <button mat-button (click)="resetForm()">Reset form</button>
+    </mat-toolbar-row>
+</mat-toolbar>
+
+<div class="container" fxLayout>
+  <form #resumeForm="ngForm">
+    <div class="title">
+      <h2>Personal details</h2>
+      <mat-divider></mat-divider>
+    </div>
+
+    <div fxLayout="row" fxLayoutGap="20px">
+      <mat-form-field fxFlex="50">
+        <input matInput [(ngModel)]="resume.firstName" name="firstName" placeholder="First Name" #firstName="ngModel" required
+          [ngClass]="{'is-invalid': firstName.invalid && (firstName.touched || resumeForm.submitted) }">
+      </mat-form-field>
+
+      <mat-form-field fxFlex="50">
+        <input matInput [(ngModel)]="resume.lastName" name="lastName" placeholder="Last Name" #lastName="ngModel" required
+          [ngClass]="{'is-invalid': lastName.invalid && (lastName.touched || resumeForm.submitted) }">
+      </mat-form-field>
+    </div>
+
+     <mat-form-field>
+      <input matInput [(ngModel)]="resume.jobTitle" name="jobTitle" placeholder="Jobtitle" #jobTitle="ngModel" required
+        [ngClass]="{'is-invalid': jobTitle.invalid && (jobTitle.touched || resumeForm.submitted) }">
+    </mat-form-field>
+
+    <div fxLayout="row" fxLayoutGap="20px" fxLayoutAlign="start center">
+
+      <mat-form-field fxFlex="50">
+        <input matInput [(ngModel)]="resume.birthDate" name="birthDate" placeholder="Birth Date" #birthDate="ngModel" required
+          [ngClass]="{'is-invalid': birthDate.invalid && (birthDate.touched || resumeForm.submitted) }">
+      </mat-form-field>
+
+      <mat-form-field fxFlex="50">
+        <input matInput [(ngModel)]="resume.nationality" name="nationality" placeholder="Nationality" #nationality="ngModel"
+          required [ngClass]="{'is-invalid': nationality.invalid && (nationality.touched || resumeForm.submitted) }">
+      </mat-form-field>
+    </div>
+
+    <div fxLayout="row" fxLayoutGap="20px">
+      <mat-form-field fxFlex="30">
+        <input matInput [(ngModel)]="resume.postalCode" name="postalCode" placeholder="Postalcode" #postalCode="ngModel"
+          required [ngClass]="{'is-invalid': postalCode.invalid && (postalCode.touched || resumeForm.submitted) }">
+      </mat-form-field>
+
+      <mat-form-field fxFlex="80">
+        <input matInput [(ngModel)]="resume.city" name="city" placeholder="City" #city="ngModel" required
+          [ngClass]="{'is-invalid': city.invalid && (city.touched || resumeForm.submitted) }">
+      </mat-form-field>
+    </div>
+
+    <section>
+      <mat-checkbox [(ngModel)]="resume.license" name="license" #license="ngModel"
+        [ngClass]="{'is-invalid': license.invalid && (license.touched || resumeForm.submitted) }">
+        Drivers license?
+      </mat-checkbox>
+    </section>
+
+    <div class="title">
+      <div class="title__inner" fxLayout="row">
+        <h2>Languages</h2>
+        <span class="example-spacer"></span>
+        <button mat-button aria-label="Add language" (click)="addLanguage()">
+          Add language
+        </button>
+      </div>
+      <mat-divider></mat-divider>
+    </div>
+
+    <div fxLayout="row" fxLayoutAlign="space-between" fxLayoutGap="10px" *ngFor="let lang of resume.languages; let i=index">
+      <mat-form-field fxFlex>
+        <input matInput [(ngModel)]="lang.language" name="language{{i}}" placeholder="Language">
+      </mat-form-field>
+
+      <mat-form-field fxFlex>
+        <input matInput [(ngModel)]="lang.speak" name="speak{{i}}" placeholder="Speak">
+      </mat-form-field>
+
+      <mat-form-field fxFlex>
+        <input matInput [(ngModel)]="lang.understand" name="understand{{i}}" placeholder="Understand">
+      </mat-form-field>
+
+      <mat-form-field fxFlex>
+        <input matInput [(ngModel)]="lang.write" name="write{{i}}" placeholder="Write">
+      </mat-form-field>
+    </div>
+
+    <div class="title">
+      <h2>About me</h2>
+      <mat-divider></mat-divider>
+    </div>
+
+    <mat-form-field>
+      <textarea matInput [(ngModel)]="resume.about" name="about" placeholder="About me" #about="ngModel" required
+        [ngClass]="{'is-invalid': about.invalid && (about.touched || resumeForm.submitted) }"></textarea>
+    </mat-form-field>
+
+    <div class="title">
+      <div class="title__inner" fxLayout="row">
+        <h2>References</h2>
+        <span class="example-spacer"></span>
+        <button mat-button aria-label="Add reference" (click)="addReference()">
+          Add reference
+        </button>
+      </div>
+      <mat-divider></mat-divider>
+    </div>
+
+    <div fxLayout="row" fxLayoutAlign="space-between" fxLayoutGap="10px" *ngFor="let ref of resume.references; let i=index">
+      <mat-form-field fxFlex>
+        <input matInput [(ngModel)]="ref.name" name="name{{i}}" placeholder="Reference Name">
+      </mat-form-field>
+
+      <mat-form-field fxFlex>
+        <input matInput [(ngModel)]="ref.function" name="function{{i}}" placeholder="Reference function">
+      </mat-form-field>
+
+      <mat-form-field fxFlex>
+        <input matInput [(ngModel)]="ref.company" name="company{{i}}" placeholder="Company">
+      </mat-form-field>
+
+      <mat-form-field fxFlex>
+        <input matInput [(ngModel)]="ref.contact" name="contact{{i}}" placeholder="Contact">
+      </mat-form-field>
+    </div>
+  </form>
+</div>
+
+
+
